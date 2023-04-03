@@ -2,8 +2,10 @@
 require('partials/head.php');
 require('partials/banner.php');
 
+$rows = $db->query("SELECT * FROM `cards`;");
+
 if(array_key_exists('submit-card', $_POST)) {
-    addCard();
+    addCard($db);
     header("Refresh:0;");
 }
 ?>
