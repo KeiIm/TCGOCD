@@ -1,10 +1,5 @@
 <?php
 
-// MySQL (+ Procedural Variant)
-// $mysqli = new mysqli('localhost', 'root', '', 'tcgocd'); // mysqli_connect()
-// $result = $mysqli->query("SELECT * FROM `cards`;"); // mysqli_query($mysqli, "")
-// $rows = $result->fetch_all(MYSQLI_ASSOC); // mysqli_fetch_all($result, MYSQLI_ASSOC)
-
 class Database {
     public $connection;
 
@@ -17,14 +12,20 @@ class Database {
         return mysqli_fetch_all($result, MYSQLI_ASSOC); // or fetch
     }
 
-    // rewrite function to enable writing
+    public function addCard() {
+            $name=$_POST['name'];
+            $qty=$_POST['qty'];
+            $collection=$_POST['collection'];
+            isset($_POST['unique']) ? $unique = 1 : $unique = 0;
+    
+            mysqli_query($this ->connection, "INSERT INTO `cards` (`name`, `qty`, `unique`, `game`, `collection`) VALUES ('$name', '$qty', '$unique', 'netrunner', '$collection')");
+    }
+
+    // rewrite so one query function handles reading, writing, filtering
 }
 
 $db = new Database();
 // $db = new Database($config['database']);
-
-
-// dd($db->query("SELECT * FROM `cards`;")); //  where qty = 1
 
 
 // $id = $_GET['id'];

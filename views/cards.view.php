@@ -5,21 +5,14 @@ require('partials/banner.php');
 $rows = $db->query("SELECT * FROM `cards`;");
 
 if(array_key_exists('submit-card', $_POST)) {
-    addCard($db);
+    // dd($_POST);
+    $db->addCard();
     header("Refresh:0;");
 }
 ?>
 
 <main>
-    <nav aria-label="Table Navigation" data-bs-theme="dark">
-        <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link disabled" href="#" style="color:#e5e5e5;">Previous</a></li>
-            <?php for ($i=1, $pages=count($rows)/5; $i <= $pages; $i++): ?>
-                <li class="page-item"><a class="page-link" href="#" style="color:#e5e5e5;"><?=$i?></a></li>
-            <?php endfor ?>
-            <li class="page-item"><a class="page-link disabled" href="#" style="color:#e5e5e5;">Next</a></li>
-        </ul>
-    </nav>
+    <?php require('partials/tableNav.php'); ?>
 
     <table class="table table-dark table-hover">
         <thead>
@@ -31,6 +24,14 @@ if(array_key_exists('submit-card', $_POST)) {
             </tr>
         </thead>
         <tbody>
+
+            <?php if (count($rows) === 0): ?>
+                <td scope="col">Placeholder</th>
+                <td scope="col" class="text-center">-</th>
+                <td scope="col" class="text-center">-</th>
+                <td scope="col" class="text-center">-</th>
+            <?php endif ?>
+
             <?php foreach($rows as $row): ?>
                 <tr>
                     <th scope="row"><?= $row['name'] ?></td>
@@ -50,18 +51,11 @@ if(array_key_exists('submit-card', $_POST)) {
                     <td class="text-center"><?= $row['collection'] ?></td>
                 </tr>
             <?php endforeach ?>
+
         </tbody>  
     </table>
 
-    <nav aria-label="Table Navigation" data-bs-theme="dark">
-        <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link disabled" href="#" style="color:#e5e5e5;">Previous</a></li>
-            <?php for ($i=1, $pages=count($rows)/5; $i <= $pages; $i++): ?>
-                <li class="page-item"><a class="page-link" href="#" style="color:#e5e5e5;"><?=$i?></a></li>
-            <?php endfor ?>
-            <li class="page-item"><a class="page-link disabled" href="#" style="color:#e5e5e5;">Next</a></li>
-        </ul>
-    </nav>
+    <?php require('partials/tableNav.php'); ?>
 
     <form method="POST">
         <label for="name">Name:</label>
@@ -70,11 +64,8 @@ if(array_key_exists('submit-card', $_POST)) {
         <label for="qty">Quantity:</label>
         <input type="number" name="qty" id="qty" required> <br><br>
 
-        <span>Unique?  </span>
-        <label for="yes">Yes</label>
-        <input type="radio" name="unique" id="yes" value="on">
-        <label for="unique">No</label>
-        <input type="radio" name="unique" id="no" value="" checked="checked"> <br><br>
+        <label for="unique">Unique:</label>
+        <input type="checkbox" name="unique" id="unique"> <br><br>
 
         <label for="collection">Collection</label>
         <input type="text" name="collection" id="collection" required>
